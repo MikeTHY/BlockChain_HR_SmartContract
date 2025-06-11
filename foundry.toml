@@ -2,5 +2,8 @@
 src = "src"
 out = "out"
 libs = ["lib"]
+RPC_URL = "https://mainnet.optimism.io"
+HR_CONTRACT= "0xBc420e35E879F8954Cd1CFB7C7Cd5B98c9E5A64C"
+
 
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
