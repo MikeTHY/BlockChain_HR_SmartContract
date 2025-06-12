@@ -34,10 +34,7 @@ interface IHumanResources {
     /// Registers an employee in the HR system
     /// @param employee address of the employee
     /// @param weeklyUsdSalary salary of the employee in USD scaled with 18 decimals
-    function registerEmployee(
-        address employee,
-        uint256 weeklyUsdSalary
-    ) external;
+    function registerEmployee(address employee, uint256 weeklyUsdSalary) external;
 
     /// Terminates the contract of a given an employee.
     /// The salary of the employee will stop being accumulated.
@@ -83,14 +80,8 @@ interface IHumanResources {
     /// @return weeklyUsdSalary the weekly salary of the employee in USD, scaled with 18 decimals
     /// @return employedSince the timestamp at which the employee was registered
     /// @return terminatedAt the timestamp at which the employee was terminated (or 0 if the employee is still active)
-    function getEmployeeInfo(
-        address employee
-    )
+    function getEmployeeInfo(address employee)
         external
         view
-        returns (
-            uint256 weeklyUsdSalary,
-            uint256 employedSince,
-            uint256 terminatedAt
-        );
+        returns (uint256 weeklyUsdSalary, uint256 employedSince, uint256 terminatedAt);
 }
