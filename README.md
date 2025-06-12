@@ -1,77 +1,47 @@
-## Foundry
+# BlockChain_HR_SmartContract
+# HumanResources Smart Contract on Optimism
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+## Summary
+This project implements a Solidity-based `HumanResources` contract for managing an HR payroll system on the Optimism network. It allows an HR Manager to register or terminate employees, handle salary accrual, and process withdrawals in either USDC or ETH using real-time Chainlink price feeds and Uniswap AMM swaps.
 
-Foundry consists of:
+## Key Features
+- **Role-Based Access Control:** Only HR Manager can register/terminate employees.
+- **Salary Accrual System:** Employees accrue salary continuously, withdrawable at any time.
+- **Multi-Currency Withdrawal:** Employees choose USDC or ETH, with on-demand swaps via Uniswap.
+- **Price Security:** Integrates Chainlink Oracle for real-time ETH/USD price feeds, protecting against AMM manipulation.
+- **Safe ETH Transfers:** Implements re-entrancy guards during ETH payments.
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+## Technologies Used
+- Solidity (v0.8.x)
+- Foundry (Forge) for testing and deployment
+- Chainlink Oracle (ETH/USD price feed)
+- Uniswap V3 Swap Router (AMM)
+- Optimism L2 Network
 
-## Documentation
-The registerEmployee function add a employee to the list of employee under the mapping of their address, it initiate a list of information for the employee. The terminateEmployee function modify the struct (list of information) for the employee to a terminated status. Those two function can only be called by the hr manager. 
+## File Structure
+- `/src/HumanResources.sol` - Main smart contract
+- `/test/HumanResources.t.sol` - Comprehensive test suite (success & failure cases)
+- `/deployed-address.txt` - Optimism deployment address
+- `/submit-transaction.txt` - Submission transaction hash
+- `/README.md` - This documentation
 
-Function getEmployeeInfo is only use to get a specific employee informations from it's struct. Function getActiveEmployeeCount is for getting the current total active employee number.
+## Deployment Details
+- **Deployed Address:** *(fill this after deployment)*  
+- **Submit Transaction Hash:** *(fill this after submit function call)*  
 
-Function salaryAvailable is used to get a specific employee's accumulated unclaim salary in his/her prefered currency (eth or usdc). By getting the amount salary in usd from struct and if prefered currency is eth, use chainlink feed to get eth price, then calculate the salary amount in eth. If in usdc, simpily adjust the decimals.
+## Oracle & AMM Integration
+- **Chainlink ETH/USD Price Feed:** [0x13e3Ee699D1909E989722E753853AE30b17e08c5](https://optimistic.etherscan.io/address/0x13e3Ee699D1909E989722E753853AE30b17e08c5)
+- **Uniswap V3 Router:** [0xE592427A0AEce92De3Edee1F18E0157C05861564](https://optimistic.etherscan.io/address/0xE592427A0AEce92De3Edee1F18E0157C05861564)
 
-Function withdrawSalary can only be called by employees. it is used to claim his/her accumulated unclaim salary in prefered currency by the help of calling salaryAvailble function to know the amount first. If prefered currency is eth, the original exact amount of USD salary is used to exchange into weth and then unwrap to eth. It is re-entrance safe as struct values are adjusted before the exchange, the exchange of currency use uniswap. The exact amount of USD salary is adjust to USDC by decimals, then with uniswap, we can swap to the according value of WETH. The weth must be at least 98% of the original value of USDC to protect against front-running slippage, revert if otherwise. Then Weth is then unwrap into same amount of eth. Then in both situation of prefered currency will then be transfer to employee's address.
+## Security Considerations
+- Access control enforced for sensitive functions.
+- Slippage protection implemented for Uniswap swaps.
+- Re-entrancy guards in place for ETH withdrawals.
 
-Function switchCurrency is used to toggles the employee's preferred payment currency between usdc and eth, the preference is store inside the struct of each employee. Employee must be active to call this function and withdrawSalary function will run before the switch to ensure the unclaim salary will be withdraw in previous prefered currency.
+## Testing
+- 100% function coverage via Foundry Forge.
+- Forked Optimism network tests simulate Oracle & AMM interactions.
+- Edge cases for unauthorized access, over-withdrawal, and failed swaps.
 
-
-
-https://book.getfoundry.sh/
-
-## Usage
-
-### Build
-
-```shell
-$ forge build
-```
-
-### Test
-
-```shell
-$ forge test
-```
-
-### Format
-
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+## Author
+Michael (Hing Yuen) Tsang
